@@ -1,6 +1,8 @@
-import { StyleSheet, View } from "react-native";
+import { Image, StyleSheet, View, Dimensions } from "react-native";
 import Slider from '@react-native-community/slider';
-import { useEffect, useState } from "react";
+import Indicator from '../assets/Indicator.png';
+import Thumb from '../assets/thumb.png';
+import { useMemo } from "react";
 
 type Props = {
     value: number;
@@ -8,7 +10,24 @@ type Props = {
 }
 
 const SliderContainer = ({ value, setValue }: Props) => {
-    
+
+    const bottomVal = useMemo(() => {
+        if (value <= 100) {
+            let adjustment = 0;
+            if (value <= 5) {
+                return value + 15;
+            } else if (value > 5 && value <= 60) {
+                adjustment = 10;
+            } else if (value > 60 && value < 90) {
+                adjustment = 5;
+            }
+
+            return value + value + adjustment;
+        }
+        return value;
+    }, [value]);
+
+
     return (
         <View style={styles.container}>
             <Slider
@@ -20,8 +39,12 @@ const SliderContainer = ({ value, setValue }: Props) => {
                 onValueChange={(val: number) => setValue(val)}
                 minimumTrackTintColor="#307ecc"
                 maximumTrackTintColor="#000000"
-                thumbTintColor="#333"
-            />
+                thumbImage={Thumb}
+            >
+                <View style={{ bottom: 40, left: bottomVal, position: 'absolute', height: 280, backgroundColor: '#30324E' }}>
+                    <Image source={Indicator} />
+                </View>
+            </Slider>
         </View>
     )
 }
@@ -31,13 +54,14 @@ export default SliderContainer;
 
 const styles = StyleSheet.create({
     container: {
-        height: 250,
+        height: 220,
         justifyContent: 'center',
         flex: 1,
-        alignItems: 'center'
+        alignItems: 'center',
+        position: 'relative',
     },
     slider: {
-        width: 200,
+        width: 220,
         height: 100,
         transform: [{ rotate: '-90deg' }],
     },

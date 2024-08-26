@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-end',
         marginVertical: 42,
-        height: 200,
+        height: 180,
     },
     tank: {
         width: 240,
